@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kas TRK Kelas B — Dashboard Keuangan</title>
   <link rel="icon" type="image/webp/png" href="logo.webp">
+  <link rel="apple-touch-icon" href="logo.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
@@ -204,7 +205,7 @@
                 </div>
               </div>
               <div class="chart-container">
-                <svg id="svg-trend" style="width:100%;height:180px;display:block;"></svg>
+                <svg id="svg-trend" viewBox="0 0 560 180" preserveAspectRatio="none" style="height:180px;"></svg>
               </div>
             </div>
 
@@ -448,6 +449,26 @@
       </div><!-- end .view-container -->
     </main>
   </div>
+
+  <!-- Bottom Nav (mobile only) -->
+  <nav class="bottom-nav">
+    <button class="bottom-nav-item active" data-target="dashboard">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>Dashboard</span>
+    </button>
+    <button class="bottom-nav-item" data-target="uang-kas">
+      <span class="material-symbols-outlined">grid_on</span>
+      <span>Kas</span>
+    </button>
+    <button class="bottom-nav-item" data-target="ledger">
+      <span class="material-symbols-outlined">receipt_long</span>
+      <span>Ledger</span>
+    </button>
+    <button class="bottom-nav-item" data-target="members">
+      <span class="material-symbols-outlined">group</span>
+      <span>Kelas</span>
+    </button>
+  </nav>
 
   <!-- Toast -->
   <div id="toast" class="toast-notification">

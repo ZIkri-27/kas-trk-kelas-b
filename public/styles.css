@@ -648,36 +648,173 @@ tr.highlight-self td { background:var(--blue-dim) !important; }
    RESPONSIVE BREAKPOINTS
    ══════════════════════════════════ */
 
-/* Sidebar collapses at ≤1100px */
+/* ── Tablet: sidebar mini ────────── */
 @media (max-width: 1100px) {
   .sidebar { width:var(--sm); min-width:var(--sm); padding:16px 10px; }
   .logo-text, .menu-label, .user-info, #logout-btn { display:none; }
   .sidebar-header { justify-content:center; margin-bottom:18px; padding-left:0; }
   .menu-item { justify-content:center; padding:11px 0; }
   .user-profile { justify-content:center; }
-  .main-content { margin-left:var(--sm); padding:22px 20px 48px; }
+  .main-content { margin-left:var(--sm); padding:22px 18px 48px; }
 }
 
-/* Medium screens */
-@media (max-width: 768px) {
-  .main-content { padding:18px 14px 40px; }
-  .top-bar { margin-bottom:18px; }
-  .header-title h1 { font-size:19px; }
-  .content-card { padding:16px; }
-  .kpi-value { font-size:18px; }
+/* ── Mobile: sidebar hilang, bottom nav muncul ── */
+@media (max-width: 640px) {
+  /* Sembunyikan sidebar sepenuhnya */
+  .sidebar { display:none; }
+
+  /* Main content full width, padding bawah untuk bottom nav */
+  .main-content {
+    margin-left: 0;
+    padding: 16px 14px 90px;
+  }
+
+  /* Top bar: stack vertikal */
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .header-title h1 { font-size: 18px; }
+  .header-title p  { font-size: 11.5px; }
+  .header-actions  { width: 100%; justify-content: space-between; }
+  .date-widget { font-size: 11px; padding: 6px 10px; flex:1; justify-content:center; }
+  .btn-export  { font-size: 11px; padding: 6px 10px; }
+
+  /* Cards */
+  .content-card { padding: 14px; margin-bottom: 14px; border-radius: var(--r-md); }
+  .card-header  { margin-bottom: 12px; }
+  .card-header h3 { font-size: 13px; }
+  .sub-header     { font-size: 11px; }
+
+  /* KPI: 2 kolom */
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .kpi-card { padding: 13px 13px 11px; }
+  .kpi-value { font-size: 17px; }
+  .kpi-label { font-size: 9px; }
+  .kpi-icon  { width:30px; height:30px; min-width:30px; }
+  .kpi-icon .material-symbols-outlined { font-size: 15px; }
+
+  /* Charts: 1 kolom */
+  .charts-row    { grid-template-columns: 1fr; gap: 14px; }
+  .dashboard-row { grid-template-columns: 1fr; gap: 14px; }
+  .members-layout { grid-template-columns: 1fr; }
+
+  /* Chart SVG lebih pendek di mobile */
+  #svg-trend { height: 140px !important; }
+
+  /* Donut lebih kecil */
+  #svg-donut { width: 120px !important; height: 120px !important; }
+
+  /* Tabel: font lebih kecil, scroll horizontal */
+  .data-table { font-size: 11.5px; }
+  .data-table th { padding: 8px 10px; font-size: 9px; }
+  .data-table td { padding: 9px 10px; }
+  .badge { font-size: 9.5px; padding: 2px 7px; }
+
+  /* Dues grid */
+  .dues-table { font-size: 11px; }
+  .dues-table th { padding: 5px 6px; font-size: 8.5px; }
+  .dues-table td { padding: 4px 6px; }
+  .due-checkbox { width: 18px; height: 18px; min-width: 18px; }
+
+  /* Ledger header */
+  .ledger-header-grid { flex-direction: column; }
+  .ledger-actions-group { width: 100%; }
+  .search-box { max-width: 100%; flex: 1; }
+  .filter-buttons { flex: 1; justify-content: center; }
+  .filter-btn { flex: 1; text-align: center; font-size: 10.5px; padding: 5px 6px; }
+
+  /* Table header flex */
+  .table-header-flex { flex-direction: column; gap: 8px; }
+
+  /* Personal dues card */
+  .personal-dues-grid { grid-template-columns: 1fr; }
+  .personal-info-side { border-right: none; padding-right: 0; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .personal-weeks-grid { grid-template-columns: repeat(4, 1fr); }
+  .personal-name-heading { font-size: 15px; }
+  .personal-stat-value { font-size: 18px; }
+
+  /* Form */
+  .form-row { flex-direction: column; gap: 10px; }
+  .form-group.half { min-width: 100%; }
+
+  /* Login */
+  .login-container { padding: 26px 20px; border-radius: var(--r-lg); }
+  .login-header h1 { font-size: 20px; }
 }
 
-/* Small phones */
-@media (max-width: 480px) {
-  .main-content { padding:14px 10px 36px; }
-  .header-actions { width:100%; }
-  .content-card { padding:13px; margin-bottom:13px; }
-  .kpi-grid { gap:10px; }
-  .kpi-card { padding:14px; }
-  .kpi-value { font-size:16px; }
-  .kpi-icon { width:32px; height:32px; min-width:32px; }
-  .kpi-icon .material-symbols-outlined { font-size:16px; }
-  .date-widget { font-size:11px; padding:6px 10px; }
+/* ── Bottom Navigation Bar (mobile only) ── */
+.bottom-nav {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 68px;
+    background: rgba(10,13,20,0.97);
+    border-top: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 300;
+    padding: 0 8px;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    color: var(--text-3);
+    font-family: var(--font-b);
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 4px;
+    border-radius: var(--r-md);
+    transition: var(--tf);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bottom-nav-item .material-symbols-outlined {
+    font-size: 22px;
+    transition: var(--tf);
+  }
+
+  .bottom-nav-item:active {
+    background: var(--bg-hover);
+    transform: scale(0.93);
+  }
+
+  .bottom-nav-item.active {
+    color: var(--green);
+  }
+
+  .bottom-nav-item.active .material-symbols-outlined {
+    font-size: 24px;
+  }
+
+  /* Indikator titik aktif */
+  .bottom-nav-item.active::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 32px;
+    height: 2px;
+    background: var(--green);
+    border-radius: 2px 2px 0 0;
+  }
+
+  .bottom-nav-item { position: relative; }
 }
 
 /* ══════════════════════════════════

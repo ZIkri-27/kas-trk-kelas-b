@@ -120,16 +120,15 @@ function drawTrendChart() {
   const last = pts.slice(-20);
   if (last.length < 2) {
     // Draw empty state
-    const fo = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-    fo.setAttribute('x', '0'); fo.setAttribute('y', '0');
-    fo.setAttribute('width', '560'); fo.setAttribute('height', '180');
-    fo.innerHTML = `<div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#4a5568;font-size:13px;font-family:DM Sans,sans-serif;">Belum ada data transaksi</div>`;
-    svg.appendChild(fo);
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', '300'); text.setAttribute('y', '100');
+    text.setAttribute('fill', 'var(--text-3)'); text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('font-size', '13'); text.textContent = 'Belum ada data transaksi';
+    svg.appendChild(text);
     return;
   }
 
-  const W = svg.getBoundingClientRect().width || 560;
-  const H = 180, px = 12, py = 20;
+  const W = 600, H = 200, px = 12, py = 20;
   const minV = Math.min(...last.map(p => p.bal));
   const maxV = Math.max(...last.map(p => p.bal), minV + 1);
   const rng  = maxV - minV || 1;
@@ -783,10 +782,22 @@ function downloadCSV(rows, filename) {
 // ══════════════════════════════════════════
 function switchTab(tabId) {
   state.activeTab = tabId;
+
+  // Sidebar menu
   document.querySelectorAll('.menu-item').forEach(btn =>
     btn.classList.toggle('active', btn.getAttribute('data-target') === tabId));
+
+  // Bottom nav
+  document.querySelectorAll('.bottom-nav-item').forEach(btn =>
+    btn.classList.toggle('active', btn.getAttribute('data-target') === tabId));
+
+  // Views
   document.querySelectorAll('.app-view').forEach(view =>
     view.classList.toggle('active', view.id === `view-${tabId}`));
+
+  // Scroll to top on mobile
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
   renderAll();
 }
 
@@ -795,8 +806,12 @@ function switchTab(tabId) {
 // ══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Navigation
+  // Sidebar Navigation
   document.querySelectorAll('.menu-item').forEach(btn =>
+    btn.addEventListener('click', () => switchTab(btn.getAttribute('data-target'))));
+
+  // Bottom Nav (mobile)
+  document.querySelectorAll('.bottom-nav-item').forEach(btn =>
     btn.addEventListener('click', () => switchTab(btn.getAttribute('data-target'))));
 
   // Date
