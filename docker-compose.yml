@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: keuangan-trk-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/usr/src/app/data
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - PORT=3000

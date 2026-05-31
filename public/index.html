@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kas TRK Kelas B — Dashboard Keuangan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ── Login Screen ───────────────────── -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-container">
+      <div class="login-header">
+        <div class="logo-icon">
+          <span class="material-symbols-outlined" style="font-size:22px;color:#080c12;">payments</span>
+        </div>
+        <h1>Kas TRK B</h1>
+        <p>Sistem Pengelolaan Keuangan Kelas</p>
+      </div>
+
+      <div class="login-tabs">
+        <button class="login-tab-btn active" id="tab-student-btn">
+          <span class="material-symbols-outlined" style="font-size:15px;">person</span>
+          Siswa
+        </button>
+        <button class="login-tab-btn" id="tab-admin-btn">
+          <span class="material-symbols-outlined" style="font-size:15px;">admin_panel_settings</span>
+          Pengurus
+        </button>
+      </div>
+
+      <form id="student-login-form" class="login-form active">
+        <div class="form-group">
+          <label for="student-nim-input">Nomor Induk Mahasiswa (NIM)</label>
+          <div class="input-with-icon">
+            <span class="material-symbols-outlined">badge</span>
+            <input type="text" id="student-nim-input" placeholder="Masukkan NIM Anda" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">
+          <span class="material-symbols-outlined" style="font-size:16px;">login</span>
+          Masuk sebagai Siswa
+        </button>
+      </form>
+
+      <form id="admin-login-form" class="login-form">
+        <div class="form-group">
+          <label for="admin-password-input">Password Administrator</label>
+          <div class="input-with-icon">
+            <span class="material-symbols-outlined">lock</span>
+            <input type="password" id="admin-password-input" placeholder="Masukkan Password Admin" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full"
+          style="background:var(--amber);box-shadow:0 4px 12px var(--amber-glow);color:#080c12;">
+          <span class="material-symbols-outlined" style="font-size:16px;">vpn_key</span>
+          Masuk sebagai Pengurus
+        </button>
+      </form>
+
+      <div class="login-divider"><span>atau</span></div>
+      <button id="guest-login-btn" class="btn btn-secondary btn-full">
+        <span class="material-symbols-outlined" style="font-size:16px;">visibility</span>
+        Akses Pengunjung (Baca-Saja)
+      </button>
+    </div>
+  </div>
+
+  <!-- ── App Container ──────────────────── -->
+  <div class="app-container" style="display:none;">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">
+          <span class="material-symbols-outlined">payments</span>
+        </div>
+        <div class="logo-text">
+          <h2>Kas TRK B</h2>
+          <span>Keuangan Kelas</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <button class="menu-item active" data-target="dashboard">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="menu-label">Dashboard</span>
+        </button>
+        <button class="menu-item" data-target="uang-kas">
+          <span class="material-symbols-outlined">grid_on</span>
+          <span class="menu-label">Uang Kas Tracker</span>
+        </button>
+        <button class="menu-item" data-target="ledger">
+          <span class="material-symbols-outlined">receipt_long</span>
+          <span class="menu-label">Buku Kas (Ledger)</span>
+        </button>
+        <button class="menu-item" data-target="members">
+          <span class="material-symbols-outlined">group</span>
+          <span class="menu-label">Daftar Kelas</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <span class="material-symbols-outlined" id="admin-icon">lock</span>
+          <div class="user-info">
+            <span class="user-name" id="role-title">Pengunjung</span>
+            <span class="user-role" id="role-status">Mode Baca-Saja</span>
+          </div>
+        </div>
+        <button id="logout-btn" class="btn btn-secondary btn-full">
+          <span class="material-symbols-outlined" style="font-size:15px;">logout</span>
+          Keluar Akun
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="header-title">
+          <h1 id="page-title">Dashboard Utama</h1>
+          <p id="page-subtitle">Ringkasan keuangan dan statistik kas kelas</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn-export admin-only" id="export-btn">
+            <span class="material-symbols-outlined">download</span>
+            Export
+          </button>
+          <div class="date-widget">
+            <span class="material-symbols-outlined">calendar_today</span>
+            <span id="current-date">—</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="view-container">
+
+        <!-- ── VIEW: Dashboard ──────────── -->
+        <section id="view-dashboard" class="app-view active">
+
+          <!-- KPI Grid -->
+          <div class="kpi-grid">
+
+            <div class="kpi-card card-balance">
+              <div class="kpi-top">
+                <span class="kpi-label">Total Saldo Kas</span>
+                <div class="kpi-icon"><span class="material-symbols-outlined">account_balance_wallet</span></div>
+              </div>
+              <h3 class="kpi-value" id="kpi-balance">Rp 0</h3>
+              <span class="kpi-trend positive">
+                <span class="material-symbols-outlined">trending_up</span> Saldo Bersih
+              </span>
+            </div>
+
+            <div class="kpi-card card-income">
+              <div class="kpi-top">
+                <span class="kpi-label">Total Pemasukan</span>
+                <div class="kpi-icon"><span class="material-symbols-outlined">south_east</span></div>
+              </div>
+              <h3 class="kpi-value" id="kpi-income">Rp 0</h3>
+              <span class="kpi-subtext">Semua periode kas</span>
+            </div>
+
+            <div class="kpi-card card-expense">
+              <div class="kpi-top">
+                <span class="kpi-label">Total Pengeluaran</span>
+                <div class="kpi-icon"><span class="material-symbols-outlined">north_west</span></div>
+              </div>
+              <h3 class="kpi-value" id="kpi-expense">Rp 0</h3>
+              <span class="kpi-subtext">Keperluan kelas</span>
+            </div>
+
+            <div class="kpi-card card-dues">
+              <div class="kpi-top">
+                <span class="kpi-label">Setoran Diterima</span>
+                <div class="kpi-icon"><span class="material-symbols-outlined">done_all</span></div>
+              </div>
+              <h3 class="kpi-value" id="kpi-dues-count">0</h3>
+              <span class="kpi-subtext">Total transaksi kas</span>
+            </div>
+
+          </div>
+
+          <!-- 3-column Charts Row -->
+          <div class="charts-row">
+
+            <!-- Trend line chart -->
+            <div class="content-card chart-main-card">
+              <div class="chart-header-row">
+                <div>
+                  <h3>Tren Saldo Kas</h3>
+                  <span class="sub-header">Pergerakan saldo dari waktu ke waktu</span>
+                </div>
+                <div class="chart-legend">
+                  <span class="legend-item"><span class="color-dot income"></span>Masuk</span>
+                  <span class="legend-item"><span class="color-dot expense"></span>Keluar</span>
+                </div>
+              </div>
+              <div class="chart-container">
+                <svg id="svg-trend" viewBox="0 0 560 180" preserveAspectRatio="none" style="height:180px;"></svg>
+              </div>
+            </div>
+
+            <!-- Donut: Kategori -->
+            <div class="content-card">
+              <div class="card-header">
+                <h3>Kategori Pengeluaran</h3>
+                <span class="sub-header">Distribusi per kategori</span>
+              </div>
+              <div class="donut-wrapper">
+                <svg id="svg-donut" viewBox="0 0 160 160" style="width:140px;height:140px;flex-shrink:0;"></svg>
+                <div class="donut-legend" id="donut-legend"></div>
+              </div>
+            </div>
+
+            <!-- Dues progress per siswa -->
+            <div class="content-card">
+              <div class="card-header">
+                <h3>Progress Iuran</h3>
+                <span class="sub-header">% pembayaran per anggota</span>
+              </div>
+              <div class="dues-progress-chart" id="dues-progress-chart"></div>
+            </div>
+
+          </div>
+
+          <!-- Dashboard Row: bar chart + quick add -->
+          <div class="dashboard-row">
+            <div class="content-card">
+              <div class="card-header">
+                <h3>Transaksi Terakhir</h3>
+                <span class="sub-header">Perbandingan nominal per transaksi</span>
+              </div>
+              <div class="bar-chart-container" id="bar-chart-container"></div>
+            </div>
+
+            <div class="content-card admin-only">
+              <div class="card-header">
+                <h3>Transaksi Cepat</h3>
+                <span class="sub-header">Catat transaksi baru secara instan</span>
+              </div>
+              <form id="quick-add-form" class="themed-form">
+                <div class="form-row">
+                  <div class="form-group half">
+                    <label for="tx-type">Tipe</label>
+                    <select id="tx-type" required>
+                      <option value="income">Pemasukan</option>
+                      <option value="expense">Pengeluaran</option>
+                    </select>
+                  </div>
+                  <div class="form-group half">
+                    <label for="tx-category">Kategori</label>
+                    <select id="tx-category" required>
+                      <option value="dues">Uang Kas</option>
+                      <option value="donation">Donasi</option>
+                      <option value="social">Sosial</option>
+                      <option value="photocopies">Fotokopi</option>
+                      <option value="consumption">Konsumsi</option>
+                      <option value="other">Lain-lain</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="tx-amount">Jumlah (Rp)</label>
+                  <input type="number" id="tx-amount" min="1000" placeholder="Contoh: 5000" required>
+                </div>
+                <div class="form-group">
+                  <label for="tx-desc">Keterangan</label>
+                  <input type="text" id="tx-desc" placeholder="Contoh: Beli spidol kelas" required>
+                </div>
+                <div class="form-row">
+                  <div class="form-group half">
+                    <label for="tx-date">Tanggal</label>
+                    <input type="date" id="tx-date" required>
+                  </div>
+                  <div class="form-group half">
+                    <label for="tx-member">Kaitkan Siswa</label>
+                    <select id="tx-member">
+                      <option value="">-- Tanpa Siswa --</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                  <span class="material-symbols-outlined" style="font-size:16px;">add</span>
+                  Simpan Transaksi
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Recent Transactions Table -->
+          <div class="content-card">
+            <div class="card-header table-header-flex">
+              <div style="min-width:0;">
+                <h3>Mutasi Kas Terakhir</h3>
+                <span class="sub-header">5 transaksi terbaru</span>
+              </div>
+              <button class="btn btn-text" onclick="switchTab('ledger')" style="flex-shrink:0;">
+                Lihat Semua
+                <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;">chevron_right</span>
+              </button>
+            </div>
+            <div class="scroll-x">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Tanggal</th><th>Kategori</th><th>Deskripsi</th>
+                    <th>Anggota</th><th>Jumlah</th><th>Tipe</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-transactions-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ── VIEW: Uang Kas ────────────── -->
+        <section id="view-uang-kas" class="app-view">
+          <div id="personal-dues-card" class="personal-dues-detail-card" style="display:none;"></div>
+
+          <div class="content-card full-width">
+            <div class="card-header" style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;">
+              <div style="min-width:0;">
+                <h3>Lembar Uang Kas Mingguan</h3>
+                <span class="sub-header">Semester ini — 16 Pekan. Admin: klik kotak untuk ubah status.</span>
+              </div>
+              <div class="dues-header-actions">
+                <div class="search-box" style="min-width:150px;">
+                  <span class="material-symbols-outlined">search</span>
+                  <input type="text" id="dues-search" placeholder="Cari nama siswa...">
+                </div>
+                <div class="dues-settings admin-only">
+                  <div class="setting-input-group">
+                    <label for="settings-dues-amount">Nominal:</label>
+                    <input type="number" id="settings-dues-amount" value="5000" min="1000" step="1000">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="scroll-x">
+              <table class="dues-table">
+                <thead><tr id="dues-table-header"></tr></thead>
+                <tbody id="dues-table-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── VIEW: Ledger ──────────────── -->
+        <section id="view-ledger" class="app-view">
+          <div class="content-card full-width">
+            <div class="card-header ledger-header-grid">
+              <div style="min-width:0;">
+                <h3>Buku Ledger Transaksi</h3>
+                <span class="sub-header">Log audit seluruh dana kas kelas</span>
+              </div>
+              <div class="ledger-actions-group">
+                <div class="search-box">
+                  <span class="material-symbols-outlined">search</span>
+                  <input type="text" id="ledger-search" placeholder="Cari deskripsi atau anggota...">
+                </div>
+                <div class="filter-buttons">
+                  <button class="filter-btn active" data-filter="all">Semua</button>
+                  <button class="filter-btn" data-filter="income">Masuk</button>
+                  <button class="filter-btn" data-filter="expense">Keluar</button>
+                </div>
+                <button class="btn-export admin-only" id="export-ledger-btn">
+                  <span class="material-symbols-outlined">download</span>
+                  CSV
+                </button>
+              </div>
+            </div>
+            <div class="scroll-x">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Tanggal</th><th>Kategori</th><th>Deskripsi</th>
+                    <th>Anggota</th><th>Nominal</th><th>Jenis</th>
+                    <th class="admin-only">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="ledger-transactions-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── VIEW: Anggota ─────────────── -->
+        <section id="view-members" class="app-view">
+          <div class="members-layout">
+            <div class="content-card admin-only" style="height:fit-content;">
+              <div class="card-header">
+                <h3>Tambah Siswa Baru</h3>
+                <span class="sub-header">Registrasi ke database kas</span>
+              </div>
+              <form id="add-member-form" class="themed-form">
+                <div class="form-group">
+                  <label for="member-name">Nama Lengkap</label>
+                  <input type="text" id="member-name" placeholder="Contoh: Muhammad Rafli" required>
+                </div>
+                <div class="form-group">
+                  <label for="member-nim">NIM</label>
+                  <input type="text" id="member-nim" placeholder="Contoh: 12050112345" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                  <span class="material-symbols-outlined" style="font-size:16px;">person_add</span>
+                  Tambahkan Siswa
+                </button>
+              </form>
+            </div>
+
+            <div class="content-card" style="min-width:0;">
+              <div class="card-header table-header-flex">
+                <div style="min-width:0;">
+                  <h3>Statistik Anggota Kelas</h3>
+                  <span class="sub-header">Rangkuman pembayaran per siswa</span>
+                </div>
+                <button class="btn-export admin-only" id="export-members-btn" style="flex-shrink:0;">
+                  <span class="material-symbols-outlined">download</span>
+                  CSV
+                </button>
+              </div>
+              <div class="scroll-x">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Nama Siswa</th><th>NIM</th><th>Pekan</th>
+                      <th>Total Setoran</th><th>Progress</th>
+                      <th class="admin-only" style="text-align:center;">Kunci</th>
+                      <th class="admin-only" style="text-align:center;">Hapus</th>
+                    </tr>
+                  </thead>
+                  <tbody id="members-list-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- end .view-container -->
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast-notification">
+    <span class="material-symbols-outlined toast-icon">info</span>
+    <span class="toast-message">Notifikasi</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

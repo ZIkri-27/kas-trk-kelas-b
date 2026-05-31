@@ -1,0 +1,16 @@
+{
+  "name": "keuangan-trk-kelas-b",
+  "version": "1.0.0",
+  "description": "Class Finance Tracking Application for TRK Class B",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.7"
+  }
+}
