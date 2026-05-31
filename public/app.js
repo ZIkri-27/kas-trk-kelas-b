@@ -120,11 +120,11 @@ function drawTrendChart() {
   const last = pts.slice(-20);
   if (last.length < 2) {
     // Draw empty state
-    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', '300'); text.setAttribute('y', '100');
-    text.setAttribute('fill', 'var(--text-3)'); text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('font-size', '13'); text.textContent = 'Belum ada data transaksi';
-    svg.appendChild(text);
+    const fo = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+    fo.setAttribute('x', '0'); fo.setAttribute('y', '0');
+    fo.setAttribute('width', '560'); fo.setAttribute('height', '180');
+    fo.innerHTML = `<div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#4a5568;font-size:13px;font-family:DM Sans,sans-serif;">Belum ada data transaksi</div>`;
+    svg.appendChild(fo);
     return;
   }
 
