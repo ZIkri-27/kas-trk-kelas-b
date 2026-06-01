@@ -196,32 +196,39 @@ app.post('/api/transactions', requireAdmin, async (req, res) => {
     );
 
     // ── Auto-input ke Uang Kas Tracker ──────────────────────────
-    // Syarat: pemasukan + kategori uang kas + ada member_id
     if (type === 'income' && category === 'dues' && member_id) {
+      console.log('Auto-dues triggered:', { member_id, amount, date });
 
-      // Ambil semua pekan yang sudah dibayar member ini
       const paidWeeks = await db.all(
         `SELECT week_number FROM dues_payments WHERE member_id = ?`,
         [member_id]
       );
       const paidNums = paidWeeks.map(r => r.week_number);
+      console.log('Already paid weeks:', paidNums);
 
-      // Hitung berapa pekan yang bisa diisi dari nominal
       const duesAmount = parseInt(process.env.DUES_AMOUNT) || 5000;
       const weeksToFill = Math.floor(amount / duesAmount);
+      console.log('Weeks to fill:', weeksToFill);
 
-      // Cari pekan belum dibayar secara berurutan
       let filled = 0;
       for (let w = 1; w <= 16 && filled < weeksToFill; w++) {
         if (!paidNums.includes(w)) {
-          await db.run(
-            `INSERT OR IGNORE INTO dues_payments (member_id, week_number, amount, payment_date, transaction_id)
-             VALUES (?, ?, ?, ?, ?)`,
-            [member_id, w, duesAmount, date, result.id]
-          );
-          filled++;
+          try {
+            await db.run(
+              `INSERT OR IGNORE INTO dues_payments (member_id, week_number, amount, payment_date, transaction_id)
+               VALUES (?, ?, ?, ?, ?)`,
+              [member_id, w, duesAmount, date, result.id]
+            );
+            console.log(`Week ${w} filled for member ${member_id}`);
+            filled++;
+          } catch(insertErr) {
+            console.error(`Failed insert week ${w}:`, insertErr.message);
+          }
         }
       }
+      console.log(`Total filled: ${filled}`);
+    } else {
+      console.log('Auto-dues skipped:', { type, category, member_id });
     }
     // ────────────────────────────────────────────────────────────
 
