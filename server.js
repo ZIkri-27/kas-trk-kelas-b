@@ -215,9 +215,9 @@ app.post('/api/transactions', requireAdmin, async (req, res) => {
       for (let w = 1; w <= 16 && filled < weeksToFill; w++) {
         if (!paidNums.includes(w)) {
           await db.run(
-            `INSERT OR IGNORE INTO dues_payments (member_id, week_number, amount, date)
-             VALUES (?, ?, ?, ?)`,
-            [member_id, w, duesAmount, date]
+            `INSERT OR IGNORE INTO dues_payments (member_id, week_number, amount, payment_date, transaction_id)
+             VALUES (?, ?, ?, ?, ?)`,
+            [member_id, w, duesAmount, date, result.id]
           );
           filled++;
         }
