@@ -854,7 +854,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const isBound = type === 'income' && category === 'dues' && body.member_id;
         showToast(
           isBound
-            ?   `Transaksi disimpan & iuran otomatis diperbarui di Tracker! ✓`
+            ?   `Iuran otomatis tercatat di Tracker! ✓`
             :   `Transaksi berhasil disimpan!`,
           'success'
           );
